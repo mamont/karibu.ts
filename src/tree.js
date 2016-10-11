@@ -3,13 +3,15 @@ class Tree {
 }
 
 class Node {
-  constructor(nodeValue) {
+  constructor(key, value) {
     Object.defineProperties(this, {
-      _val: { value: nodeValue },
       _parent: { value: null, writable: true },
       _balanceFactor: { value: 0, writable: true },
       _left: { value: null, writable: true },
       _right: { value: null, writable: true },
+
+      key: { value: key },
+      value: { value: value },
 
       isRoot: { get: () => this._parent === null },
       isLeaf: { get: () => (this._left === null) && (this._right === null) },
@@ -18,15 +20,20 @@ class Node {
   }
 }
 
+/**
+ * @property length
+ */
 class AVLTree extends Tree {
-  constructor(comparsion, equality) {
+  constructor(comparison, equality) {
     super();
 
     Object.defineProperties(this, {
-      _cmp: { value: comparsion || function(x, y) { return  x - y; } },
+      _cmp: { value: comparison || function(x, y) { return  x - y; } },
       _eq: { value: equality || function(x, y) { return x === y } },
       _root: { value: null, writable: true },
-      _count: { value: 0, writable: true }
+      _count: { value: 0, writable: true },
+
+      length: { get: () => this._count, enumerable: true }
     });
 
   }
@@ -36,8 +43,8 @@ class AVLTree extends Tree {
     this._count = 0;
   }
 
-  insert(value) {
-    let node = new Node(value);
+  insert(key, value) {
+    let node = new Node(key, value);
     this._count++;
 
     if (!this._root) {
@@ -47,25 +54,26 @@ class AVLTree extends Tree {
 
     let currNode = this._root;
     for(;;) {
-      if (this._cmp(value, currNode.value) < 0) {
-        if (currNode.left) {
-          currNode = currNode.left;
+      if (this._cmp(key, currNode.key) < 0) {
+        if (currNode._left) {
+          currNode = currNode._left;
         } else {
-          currNode.left = node;
+          currNode._left = node;
           break;
         }
       } else {
-        if (currNode.right) {
-          currNode = currNode.right;
+        if (currNode._right) {
+          currNode = currNode._right;
         } else {
-          currNode.right = node;
+          currNode._right = node;
           break;
         }
       }
     }
+
     node._parent = currNode;
     currNode = node;
-    while(currNode.parent) {
+    while(currNode._parent) {
       let parent = currNode._parent;
       let prevBalanceFactor = parent._balanceFactor;
 
@@ -79,7 +87,7 @@ class AVLTree extends Tree {
         break;
       }
 
-      if (parent._balanceFactor < -1 || parent.balanceFactor > 1) {
+      if (parent._balanceFactor < -1 || parent._balanceFactor > 1) {
         this._rebalance(parent);
         break;
       }
@@ -91,20 +99,32 @@ class AVLTree extends Tree {
   }
 
   get(key) {
+    let currentNode = this._root;
+    while (currentNode) {
+      if (this._eq(key, currentNode.key)) {
+          return currentNode.value;
+      }
 
+      if (this._cmp(key, currentNode.key) < 0) {
+        currentNode = currentNode._left;
+      } else {
+        currentNode = currentNode._right;
+      }
+    }
+    return null;
   }
 
   _rebalance(node) {
     if (node._balanceFactor < 0) {
       if (node._right._balanceFactor > 0) {
-        this._rotateRight(node.right);
+        this._rotateRight(node._right);
         this._rotateLeft(node);
       } else {
         this._rotateLeft(node);
       }
     } else if (node._balanceFactor > 0) {
       if (node._left._balanceFactor < 0) {
-        this._rotateLeft(node.left);
+        this._rotateLeft(node._left);
         this._rotateRight(node);
       } else {
         this._rotateRight(node);
@@ -160,6 +180,47 @@ class AVLTree extends Tree {
     root._balanceFactor = root._balanceFactor - 1 - Math.max(pivot._balanceFactor, 0);
   }
 
+  *iterator() {
+    if (!this._root) {
+      return null;
+    }
+
+    let fromleft = true;
+    let current = this._root;
+    while(!!current._left) {
+      current = current._left;
+    }
+
+
+    while(true) {
+      if (fromleft) {
+        yield current;
+        fromleft = false;
+
+        if (current._right) {
+          current = current._right;
+          while(!!current._left) {
+            current = current._left;
+          }
+          fromleft = true;
+        } else if (current._parent) {
+          fromleft = current._parent._left === current;
+          current = current._parent;
+        } else {
+          break;
+        }
+      } else if (current._parent) {
+        fromleft = current._parent._left === current;
+        current = current._parent;
+      } else {
+        break;
+      }
+    }
+
+    return null;
+  }
 }
 
-export { AVLTree };
+const SortedMap = AVLTree;
+
+export { SortedMap };
