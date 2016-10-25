@@ -41,35 +41,42 @@ describe('SortedMap', function() {
     let tree = new SortedMap();
 
     before(function() {
+      tree.insert(9, 'nine');
       tree.insert(5, 'five');
       tree.insert(2, 'two');
+      tree.insert(4, 'four');
       tree.insert(3, 'three');
       tree.insert(1, 'one');
-      tree.insert(4, 'four');
       tree.insert(6, 'six');
+      tree.insert(10, 'ten');
       tree.insert(7, 'seven');
       tree.insert(8, 'eight');
-      tree.insert(9, 'nine');
-      tree.insert(10, 'ten');
     });
 
     it('Iterates through the whole tree', function() {
-      const expectedKeys = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-      const iter = tree.iterator();
-
-      console.log('start');
-      for(let it = iter.next(); !it.done; it = iter.next()) {
-        console.log('iter');
-        const entry = it.value;
-        console.log(it.value.key);
-        if (!expectedKeys.has(entry.key)) {
-          assert(false);
-        }
-        expectedKeys.delete(entry.key);
+      const expectedKeys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      for(let [key, value] of tree) {
+        const pattern = expectedKeys.shift();
+        expect(key).to.equal(pattern);
       }
-      console.log('finish');
+      expect(expectedKeys.length).to.equal(0);
+    });
 
-      expect(expectedKeys.size).to.equal(0);
+    it('Iterates from given index forward', function() {
+      const expectedKeys = [5, 6, 7, 8, 9, 10];
+      for (let [key, value] of tree.getIterator(5)) {
+        const pattern = expectedKeys.shift();
+        expect(key).to.equal(pattern);
+      }
+      expect(expectedKeys.length).to.equal(0);
+    });
+
+    it('Iterates from given index backwards', function() {
+      let expectedKeys = [5, 4, 3, 2, 1];
+      for(let [key, value] of tree.getReverseIterator(5)) {
+        const pattern = expectedKeys.shift();
+        expect(key).to.equal(pattern);
+      }
     });
   });
 
