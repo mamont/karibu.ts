@@ -18,6 +18,18 @@ class Node {
       isLeftChild: { get: () => this._parent._left === this }
     });
   }
+
+  replace(what_, with_) {
+    if (!what_) {
+      return;
+    }
+
+    if (this._left === what_) {
+      this._left = with_;
+    } else if (this._right === what_) {
+      this._right = with_;
+    }
+  }
 }
 
 /**
@@ -33,7 +45,7 @@ class AVLTree extends Tree {
       _root: { value: null, writable: true },
       _count: { value: 0, writable: true },
 
-      length: { get: () => this._count, enumerable: true }
+      size: { get: () => this._count, enumerable: true }
     });
 
   }
@@ -103,6 +115,130 @@ class AVLTree extends Tree {
     while (currentNode) {
       if (this._eq(key, currentNode.key)) {
           return currentNode.value;
+      }
+
+      if (this._cmp(key, currentNode.key) < 0) {
+        currentNode = currentNode._left;
+      } else {
+        currentNode = currentNode._right;
+      }
+    }
+    return null;
+  }
+
+  delete(key) {
+    let node = this._getNode(key);
+    if (!node || node.key !== key) {
+      return null;
+    }
+
+    let parent = node._parent;
+    let left = node._left;
+    let right = node._right;
+
+    if (!!left !== !!right) { // one child
+      let child = left || right;
+      if (!parent && !child) {
+        this._root = null;
+      } else if (parent && !child) {
+        this._root = child;
+      } else {
+        parent.replace(node, null);
+        this._rebalance(parent);
+      }
+    } else { // two children
+      let maxLeft = node._left;
+      while (maxLeft._right) {
+        maxLeft = maxLeft._right;
+      }
+
+      if (node._left == maxLeft) {
+        if (node.isRoot) {
+          this._root = maxLeft;
+          maxLeft._parent = null;
+        } else {
+          if (node.isLeftChild) {
+            node._parent._left = maxLeft;
+          } else {
+            node._parent._right = maxLeft;
+          }
+          maxLeft._parent = node._parent;
+        }
+
+        maxLeft._right = node._right;
+        maxLeft._right._parent = maxLeft;
+        maxLeft._balanceFactor = node._balanceFactor;
+        node = {
+            parent: maxLeft, isLeftChild: true
+        };
+      } else {
+        let mlParent = maxLeft._parent;
+        let mlLeft = maxLeft._left;
+
+        mlParent._right = mlLeft;
+        if (mlLeft) {
+            mlLeft._parent = mlParent;
+        }
+
+        if (node.isRoot) {
+            this._root = maxLeft;
+            maxLeft._parent = null;
+        } else {
+            if (node.isLeftChild) {
+              node._parent._left = maxLeft;
+            } else {
+              node._parent._right = maxLeft;
+            }
+            maxLeft._parent = node._parent;
+        }
+
+        maxLeft._right = node._right;
+        maxLeft._right._parent = maxLeft;
+        maxLeft._left = node._left;
+        maxLeft._left._parent = maxLeft;
+        maxLeft._balanceFactor = node._balanceFactor;
+
+        currentNode = {
+            parent: minParent, isLeftChild: false
+        };
+      }
+    }
+
+    this._count--;
+
+    while (node._parent) {
+      let parent = node._parent;
+      let prevBalanceFactor = parent._balanceFactor;
+
+      if (node.isLeftChild) {
+        parent._balanceFactor -= 1;
+      } else {
+        parent._balanceFactor += 1;
+      }
+
+      if (Math.abs(parent._balanceFactor) > Math.abs(prevBalanceFactor)) {
+        if (parent.balanceFactor < -1 || parent.balanceFactor > 1) {
+          this._rebalance(parent);
+
+          if (parent._parent._balanceFactor === 0) {
+            node = parent._parent;
+          } else {
+            break;
+          }
+        } else {
+          break;
+        }
+      } else {
+        node = parent;
+      }
+    }
+  }
+
+  _getNode(key) {
+    let currentNode = this._root;
+    while (currentNode) {
+      if (this._eq(key, currentNode.key)) {
+        return currentNode;
       }
 
       if (this._cmp(key, currentNode.key) < 0) {
@@ -190,7 +326,6 @@ class AVLTree extends Tree {
     while(!!current._left) {
       current = current._left;
     }
-
 
     while(true) {
       if (fromleft) {
@@ -283,7 +418,7 @@ class AVLTree extends Tree {
         yield [ currentNode.key, currentNode.value ];
         fromright = false;
 
-        if (currentNode._right) {
+        if (currentNode._left) {
           currentNode = currentNode._left;
           while(!!currentNode._right) {
             currentNode = currentNode._right;
