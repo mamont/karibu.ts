@@ -169,7 +169,7 @@ class AVLTree extends Tree {
         maxLeft._right._parent = maxLeft;
         maxLeft._balanceFactor = node._balanceFactor;
         node = {
-            parent: maxLeft, isLeftChild: true
+          parent: maxLeft, isLeftChild: true
         };
       } else {
         let mlParent = maxLeft._parent;
@@ -177,19 +177,19 @@ class AVLTree extends Tree {
 
         mlParent._right = mlLeft;
         if (mlLeft) {
-            mlLeft._parent = mlParent;
+          mlLeft._parent = mlParent;
         }
 
         if (node.isRoot) {
-            this._root = maxLeft;
-            maxLeft._parent = null;
+          this._root = maxLeft;
+          maxLeft._parent = null;
         } else {
-            if (node.isLeftChild) {
-              node._parent._left = maxLeft;
-            } else {
-              node._parent._right = maxLeft;
-            }
-            maxLeft._parent = node._parent;
+          if (node.isLeftChild) {
+            node._parent._left = maxLeft;
+          } else {
+            node._parent._right = maxLeft;
+          }
+          maxLeft._parent = node._parent;
         }
 
         maxLeft._right = node._right;
@@ -198,7 +198,7 @@ class AVLTree extends Tree {
         maxLeft._left._parent = maxLeft;
         maxLeft._balanceFactor = node._balanceFactor;
 
-        currentNode = {
+        node = {
             parent: minParent, isLeftChild: false
         };
       }
