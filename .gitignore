@@ -3,6 +3,7 @@ docs
 bin
 dist
 build
+browser
 lib
 *.swp
 .idea

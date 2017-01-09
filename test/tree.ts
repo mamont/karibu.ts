@@ -1,11 +1,8 @@
-import { SortedMap } from '../src/tree';
+import { TreeMap } from '../src/tree';
+import { expect } from 'chai';
 
-const chai = require('chai');
-const expect = chai.expect;
-const assert = chai.assert;
-
-function prepareTree() {
-  let tree = new SortedMap();
+function prepareTree() : TreeMap<number, string> {
+  let tree = new TreeMap<number, string>();
   tree.insert(9, 'nine');
   tree.insert(5, 'five');
   tree.insert(2, 'two');
@@ -19,7 +16,7 @@ function prepareTree() {
   return tree;
 }
 
-function range(from, to) {
+function range(from : number, to : number) : number[] {
   const step = from < to ? 1 : -1;
   const len = Math.abs(to - from + step);
   const res = Array(len);
@@ -30,10 +27,10 @@ function range(from, to) {
   return res;
 }
 
-describe('SortedMap', function() {
+describe('TreeMap', function() {
 
   describe('CRUD interface', function() {
-    let tree = new SortedMap();
+    let tree = new TreeMap<number, string>();
 
     it('Accepts multiple values and returns valid values', function() {
       tree.insert(5, 'five');
@@ -117,5 +114,26 @@ describe('SortedMap', function() {
     });
   });
 
+  describe('Supports strings as keys', function() {
+    let tree = new TreeMap<string, any>();
+    it('Returns stored item', function() {
+      tree.insert('keyOne', { a: 1 });
+      let keyOne = tree.get('keyOne');
+      expect(keyOne).to.deep.equal({ a: 1 });
+    });
+
+    it('Correctly returns multiple stored item', function() {
+      tree.insert('keyTwo', { b: 2 });
+      tree.insert('keyThree', { c: 3 });
+
+      let keyOne = tree.get('keyOne');
+      expect(keyOne).to.deep.equal({ a: 1 });
+      let keyTwo = tree.get('keyTwo');
+      expect(keyTwo).to.deep.equal({ b: 2 });
+      let keyThree = tree.get('keyThree');
+      expect(keyThree).to.deep.equal({ c: 3 });
+    });
+
+  });
 });
 
