@@ -1,6 +1,6 @@
 {
   "name": "karibu",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "lib/tree.js",
   "browser": "browser/tree.js",
