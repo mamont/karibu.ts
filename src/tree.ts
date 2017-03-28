@@ -349,56 +349,27 @@ class TreeMap<K, V> implements TreeMapInterface<K, V> {
   }
 
   *[Symbol.iterator]() : IterableIterator<[K, V]>{
-    if (!this.root) {
-      return null;
+    for (let iter of this.getIterator()) {
+      yield iter;
     }
-
-    let fromleft = true;
-    let current = this.root;
-    while (current.left) {
-      current = current.left;
-    }
-
-    for (;;) {
-      if (fromleft) {
-        yield [current.key, current.value];
-        fromleft = false;
-
-        if (current.right) {
-          current = current.right;
-          while (current.left) {
-            current = current.left;
-          }
-          fromleft = true;
-        } else if (current.parent) {
-          fromleft = current.parent.left === current;
-          current = current.parent;
-        } else {
-          break;
-        }
-      } else if (current.parent) {
-        fromleft = current.parent.left === current;
-        current = current.parent;
-      } else {
-        break;
-      }
-    }
-
-    return null;
   }
 
-  *getIterator(key) : IterableIterator<[K, V]> {
+  *getIterator(key : K = null) : IterableIterator<[K, V]> {
     let currentNode = this.root;
     while (currentNode) {
-      if (this.isEqual(key, currentNode.key)) {
+      if (this.isEqual(key, currentNode.key) || ((key === null) && !currentNode.left)) {
         break;
       }
 
-      if (this.isLessThan(key, currentNode.key)) {
+      if (this.isLessThan(key, currentNode.key) || (key === null)) {
         currentNode = currentNode.left;
       } else {
         currentNode = currentNode.right;
       }
+    }
+
+    if (!currentNode) {
+      return null;
     }
 
     let fromleft = true;
@@ -414,13 +385,13 @@ class TreeMap<K, V> implements TreeMapInterface<K, V> {
           }
           fromleft = true;
         } else if (currentNode.parent) {
-          fromleft = currentNode.parent.left === currentNode;
+          fromleft = (currentNode.parent.left === currentNode);
           currentNode = currentNode.parent;
         } else {
           break;
         }
       } else if (currentNode.parent) {
-        fromleft = currentNode.parent.left === currentNode;
+        fromleft = (currentNode.parent.left === currentNode);
         currentNode = currentNode.parent;
       } else {
         break;
@@ -430,18 +401,22 @@ class TreeMap<K, V> implements TreeMapInterface<K, V> {
     return null;
   }
 
-  *getReverseIterator(key) : IterableIterator<[K, V]> {
+  *getReverseIterator(key : K = null) : IterableIterator<[K, V]> {
     let currentNode = this.root;
     while (currentNode) {
-      if (this.isEqual(key, currentNode.key)) {
+      if (this.isEqual(key, currentNode.key) || ((key === null) && !currentNode.right)) {
         break;
       }
 
-      if (!this.isLessThan(key, currentNode.key)) {
-        currentNode = currentNode.left;
-      } else {
+      if (!this.isLessThan(key, currentNode.key) || (key === null)) {
         currentNode = currentNode.right;
+      } else {
+        currentNode = currentNode.left;
       }
+    }
+
+    if (!currentNode) {
+      return null;
     }
 
     let fromright = true;
@@ -457,13 +432,13 @@ class TreeMap<K, V> implements TreeMapInterface<K, V> {
           }
           fromright = true;
         } else if (currentNode.parent) {
-          fromright = currentNode.parent.right === currentNode;
+          fromright = (currentNode.parent.right === currentNode);
           currentNode = currentNode.parent;
         } else {
           break;
         }
       } else if (currentNode.parent) {
-        fromright = currentNode.parent.right === currentNode;
+        fromright = (currentNode.parent.right === currentNode);
         currentNode = currentNode.parent;
       } else {
         break;

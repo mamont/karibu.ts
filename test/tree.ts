@@ -133,6 +133,81 @@ describe('TreeMap', function() {
       let keyThree = tree.get('keyThree');
       expect(keyThree).to.deep.equal({ c: 3 });
     });
+  });
+
+  describe('Iterators', function() {
+    let tree;
+    let keys = [0, 2, 4, 6, 8, 10];
+    beforeEach(function() {
+      tree = new TreeMap<number, any>();
+      keys.forEach(x => tree.set(x, { key: x}));
+    });
+
+    describe('getIterator', function() {
+      it('returns "done" iterator when no such key found', function() {
+        let iter = tree.getIterator(3);
+        expect(iter.next().done).to.equal(true);
+      });
+
+      it('returns "done" when it reached the end', function() {
+        let iter = tree.getIterator(10);
+        let val = iter.next();
+        expect(iter.next().done).to.equal(true);
+      });
+
+      it('iterates properly', function() {
+        let expectedSet = new Set(keys);
+        let counter = 0;
+        for (let [k, v] of tree.getIterator()) {
+          ++counter;
+          expectedSet.delete(k);
+        }
+        expect(counter).to.equal(keys.length);
+        expect(expectedSet.size).to.equal(0);
+      });
+
+      it('iterates properly from given anchor', function() {
+        let expectedSet = new Set(keys);
+        let counter = 0;
+        for (let [k, v] of tree.getIterator(0)) {
+          ++counter;
+          expectedSet.delete(k);
+        }
+        expect(counter).to.equal(keys.length);
+        expect(expectedSet.size).to.equal(0);
+      });
+
+    });
+
+    describe('getReverseIterator', function() {
+      it('returns "done" iterator when no such key found', function() {
+        let iter = tree.getReverseIterator(3);
+        expect(iter.next().done).to.equal(true);
+      });
+
+      it('iterates properly', function() {
+        let expectedSet = new Set(keys);
+        let counter = 0;
+        for (let [k, v] of tree.getReverseIterator()) {
+          ++counter;
+          expectedSet.delete(k);
+        }
+        expect(counter).to.equal(keys.length);
+        expect(expectedSet.size).to.equal(0);
+      });
+
+      it('iterates properly from given anchor', function() {
+        let expectedSet = new Set(keys);
+        let counter = 0;
+        for (let [k, v] of tree.getReverseIterator(10)) {
+          ++counter;
+          expectedSet.delete(k);
+        }
+        expect(counter).to.equal(keys.length);
+        expect(expectedSet.size).to.equal(0);
+      });
+
+    });
 
   });
 });
