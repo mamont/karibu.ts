@@ -8,4 +8,5 @@ lib
 *.swp
 .idea
 .vscode
+package-lock.json
 test/credentials.json

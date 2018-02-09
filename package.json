@@ -1,25 +1,25 @@
 {
   "name": "karibu",
-  "version": "1.0.2",
+  "version": "2.0.0-dev.1",
   "description": "Simple containers library with support of iterators interface",
   "main": "lib/tree.js",
-  "browser": "browser/tree.js",
   "typings": "lib/tree.d.ts",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha -r ts-node/register test/*ts",
-    "prepublish": "./node_modules/typescript/bin/tsc && ./node_modules/babel-cli/bin/babel.js lib --out-dir browser"
+    "prepublish": "./node_modules/typescript/bin/tsc"
   },
   "author": "Sergei Chertkov",
   "license": "ISC",
   "devDependencies": {
-    "@types/mocha": "^2.2.40",
-    "babel": "^6.23.0",
-    "babel-cli": "^6.24.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-es2015": "^6.24.0",
-    "chai": "^3.5.0",
-    "mocha": "^3.2.0",
-    "ts-node": "^3.0.2",
-    "typescript": "^2.2.2"
+    "@types/mocha": "^2.2.48",
+    "chai": "^4.1.2",
+    "mocha": "^5.0.0",
+    "ts-node": "^4.1.0",
+    "typescript": "^2.7.1"
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
   }
 }
