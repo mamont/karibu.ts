@@ -2,8 +2,8 @@
   "name": "karibu",
   "version": "3.0.0",
   "description": "Simple containers library with support of iterators interface",
-  "main": "lib/tree.js",
-  "typings": "lib/tree.d.ts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha -r ts-node/register test/*ts",
     "prepublish": "./node_modules/typescript/bin/tsc"
