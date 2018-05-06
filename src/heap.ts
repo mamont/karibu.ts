@@ -18,7 +18,7 @@ class Heap<V> {
     }
 
     public get empty() : Boolean {
-        return !this.storage.length;
+        return !this.length;
     }
 
     public push(value : V) : void {

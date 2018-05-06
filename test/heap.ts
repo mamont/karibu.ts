@@ -45,4 +45,16 @@ describe("Heap", function() {
         expect(res).to.deep.equal([5, 4, 3, 2, 1]);
     });
 
+
+    it("Size and empty getter works", () => {
+        heap = new Heap<Number>(1, 2, 3, 5, 4);
+        expect(heap.size).to.be.equal(5);
+        expect(heap.empty).to.be.false;
+
+        for (let v of heap) {}
+
+        expect(heap.size).to.be.equal(0);
+        expect(heap.empty).to.be.true;
+    });
+
 });
