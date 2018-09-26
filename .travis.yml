@@ -7,6 +7,9 @@ matrix:
       script: npm run test
 
     - node_js: '9'
+      script: npm run test
+
+    - node_js: '10'
       script:
         - npm run test
       deploy:
