@@ -449,4 +449,4 @@ class TreeMap<K, V> implements TreeMapInterface<K, V> {
   }
 }
 
-export { Map, Less, Equal, TreeMapInterface, TreeMap };
+export { Map, Less, Equal, TreeMapInterface, TreeMap, TreeMap as Tree };
