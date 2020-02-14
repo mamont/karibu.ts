@@ -1,5 +1,4 @@
 class Heap<V> {
-
     storage : V[];
     length : number;
 

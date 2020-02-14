@@ -1,4 +1,4 @@
 import { Heap } from './heap';
-import { Tree } from './tree';
+import { TreeMap } from './avltree';
 
-export { Heap, Tree };
+export { Heap, TreeMap };
