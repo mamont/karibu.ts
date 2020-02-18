@@ -1,5 +1,5 @@
 Karibu: js/ts container library
 ====================
-[![Build Status](https://travis-ci.org/mamont/karibu.ts.svg?branch=master)](https://travis-ci.org/mamont/karibu.ts)
+![Node.js CI](https://github.com/mamont/karibu.ts/workflows/Node.js%20CI/badge.svg)
 
 Set of containers which may be useful for web applications
