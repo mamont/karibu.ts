@@ -1,7 +1,7 @@
-import { TreeMap } from '../src/tree';
+import { TreeMap } from '../src/avltree';
 import { expect } from 'chai';
 
-function prepareTree() : TreeMap<number, string> {
+function prepareTree(): TreeMap<number, string> {
   let tree = new TreeMap<number, string>();
   tree.insert(9, 'nine');
   tree.insert(5, 'five');

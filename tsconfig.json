@@ -1,6 +1,6 @@
 {
     "files": [
-        "src/tree.ts"
+        "src/index.ts"
     ],
     "compilerOptions": {
         "module": "commonjs",
@@ -10,8 +10,8 @@
         "preserveConstEnums": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "target": "es2017",
-        "lib": [ "es7", "dom" ],
+        "target": "es2018",
+        "lib": [ "es2018", "dom" ],
         "outDir": "lib"
     }
 }
