@@ -1,39 +1,39 @@
 class Heap<V> {
-    storage : V[];
-    length : number;
+    storage: V[];
+    length: number;
 
-    constructor(...args : V[]) {
+    constructor(...args: V[]) {
         this.storage = [];
         this.length = 0;
 
-        for (let arg of args) {
+        for (const arg of args) {
             this.push(arg);
         }
     }
 
-    public get size() : Number {
+    public get size(): number {
         return this.length;
     }
 
-    public get empty() : Boolean {
+    public get empty(): boolean {
         return !this.length;
     }
 
-    public push(value : V) : void {
+    public push(value: V): void {
         this.storage.push(value);
         this.length++;
 
-        let idx = this.storage.length - 1;
+        const idx = this.storage.length - 1;
 
         this.checkOrdered(idx);
     }
 
-    public pop() : V | null {
+    public pop(): V | null {
         if (this.empty) {
             return null;
         }
 
-        let res = this.storage[0];
+        const res = this.storage[0];
 
         this.storage[0] = this.storage[this.storage.length - 1];
         this.length--;
@@ -44,36 +44,34 @@ class Heap<V> {
         return res;
     }
 
-    public peek() : V | null {
-        return null;
-    }
-
-    *[Symbol.iterator]() : IterableIterator<V> {
-        while(this.length != 0) {
+    * [Symbol.iterator](): IterableIterator<V> {
+        while (this.length !== 0) {
             yield this.pop();
         }
     }
 
-    private checkOrdered(idx : number) : void {
-        let parentIdx = idx / 2 | 0;
+    private checkOrdered(idx: number): void {
+        // eslint-disable-next-line no-bitwise
+        const parentIdx = idx / 2 | 0;
 
         if (this.storage[parentIdx] < this.storage[idx]) {
-            let v = this.storage[idx];
+            const v = this.storage[idx];
             this.storage[idx] = this.storage[parentIdx]; this.storage[parentIdx] = v;
 
             this.checkOrdered(parentIdx);
         }
     }
 
-    private rebuildHeap(index : number) : void {
-        while (index != null) {
-            index = this.rebuildHeapStep(index);
+    private rebuildHeap(index: number): void {
+        let idx = index;
+        while (idx != null) {
+            idx = this.rebuildHeapStep(idx);
         }
     }
 
-    private rebuildHeapStep(index : number) : number|null {
-        let left = index * 2;
-        let right = index * 2 + 1;
+    private rebuildHeapStep(index: number): number|null {
+        const left = index * 2;
+        const right = index * 2 + 1;
 
         let largest = index;
 
@@ -87,7 +85,7 @@ class Heap<V> {
             largest = right;
         }
 
-        if (largest != index) {
+        if (largest !== index) {
             [this.storage[largest], this.storage[index]] =
                 [this.storage[index], this.storage[largest]];
             return largest;

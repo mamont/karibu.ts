@@ -3,10 +3,10 @@ import { expect } from 'chai';
 
 describe("Heap", function() {
 
-    let heap : Heap<Number>;
+    let heap: Heap<number>;
 
     beforeEach(() => {
-        heap = new Heap<Number>();
+        heap = new Heap<number>();
     });
 
     it("Empty heap returns null", () => {
@@ -18,7 +18,7 @@ describe("Heap", function() {
     });
 
     it("Heap can be initialized with sequence", () => {
-        heap = new Heap<Number>(1, 2, 3, 4, 5);
+        heap = new Heap<number>(1, 2, 3, 4, 5);
         expect(heap.size).to.be.equal(5);
     });
 
@@ -34,11 +34,11 @@ describe("Heap", function() {
 
 
     it("Elements are naturally ordered", () => {
-        heap = new Heap<Number>(1, 2, 3, 5, 4);
+        heap = new Heap<number>(1, 2, 3, 5, 4);
         expect(heap.size).to.be.equal(5);
 
-        let res = [];
-        for (let v of heap) {
+        const res = [];
+        for (const v of heap) {
             res.push(v);
         }
 
@@ -47,11 +47,11 @@ describe("Heap", function() {
 
 
     it("Size and empty getter works", () => {
-        heap = new Heap<Number>(1, 2, 3, 5, 4);
+        heap = new Heap<number>(1, 2, 3, 5, 4);
         expect(heap.size).to.be.equal(5);
         expect(heap.empty).to.be.false;
 
-        for (let v of heap) {}
+        for (const v of heap) {}
 
         expect(heap.size).to.be.equal(0);
         expect(heap.empty).to.be.true;

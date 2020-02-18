@@ -1,14 +1,16 @@
-interface IMap<K, V> {
-    get(key: K) : V;
-    set(key: K, value: V) : void;
+interface Map<K, V> {
+    get(key: K): V;
+    set(key: K, value: V): void;
 }
 
-interface ITreeMap<K, V> extends IMap<K, V>, Iterable<[K, V]> {
-
-}
-
-interface IHashMap<K, V> extends IMap<K, V> {
+interface OrderedMap<K, V> extends Map<K, V>, Iterable<[K, V]> {
 
 }
 
-export { IMap, ITreeMap, IHashMap };
+// TODO: removeme?
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface UnorderedMap<K, V> extends Map<K, V> {
+
+}
+
+export { Map, OrderedMap, UnorderedMap };
