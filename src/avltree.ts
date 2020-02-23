@@ -73,7 +73,6 @@ class TreeMap<K, V> implements OrderedMap<K, V> {
         } else {
             this.insert(key, value);
         }
-        // return node;
     }
 
     insert(key: K, value: V): void {
